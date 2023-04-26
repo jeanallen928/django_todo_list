@@ -4,10 +4,6 @@ from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None):
-        """
-        Creates and saves a User with the given email, date of
-        birth and password.
-        """
         if not email:
             raise ValueError("Users must have an email address")
 
@@ -20,10 +16,6 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, email, password=None):
-        """
-        Creates and saves a superuser with the given email, date of
-        birth and password.
-        """
         user = self.create_user(
             email,
             password=password,
@@ -34,11 +26,20 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser):
+    GENDERS = [
+        ("M", "Male"),
+        ("F", "Female"),
+    ]
+
     email = models.EmailField(
         verbose_name="email address",
         max_length=255,
         unique=True,
     )
+    name = models.CharField(max_length=100)
+    gender = models.CharField(max_length=1, choices=GENDERS, blank=True)
+    age = models.PositiveIntegerField(null=True, blank=True)
+    introduction = models.TextField(blank=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
 
