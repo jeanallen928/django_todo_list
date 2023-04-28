@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from django.contrib.auth import logout
 from users.models import User
 
-from users.serializers import UserSerializer, CustomTokenObtainPairSerializer
+from users.serializers import UserSerializer, CustomTokenObtainPairSerializer, UserUpdateSerializer
 
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -41,6 +41,15 @@ class InfoView(APIView):
         request.user.delete()
         logout(request)
         return Response({"message": "회원 탈퇴!"})
+
+    def put(self, request):
+        serializer = UserUpdateSerializer(
+            instance=request.user, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class LogoutView(APIView):
