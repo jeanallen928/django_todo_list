@@ -11,3 +11,9 @@ class TodoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Todo
         fields = "__all__"
+
+
+class TodoCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Todo
+        fields = ("title", "is_complete")

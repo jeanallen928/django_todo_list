@@ -2,7 +2,7 @@ from rest_framework import status, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from todos.models import Todo
-from todos.serializers import TodoSerializer
+from todos.serializers import TodoSerializer, TodoCreateSerializer
 
 
 class TodoView(APIView):
@@ -12,7 +12,12 @@ class TodoView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
-        pass
+        serializer = TodoCreateSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
 
 
 class TodoDetailView(APIView):
