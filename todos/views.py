@@ -49,8 +49,3 @@ class TodoDetailView(APIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
         else:
             return Response("권한이 없습니다.", status=status.HTTP_403_FORBIDDEN)
-
-
-class StatusView(APIView):
-    def post(self, request):
-        pass
