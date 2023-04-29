@@ -29,12 +29,15 @@ class TodoDetailView(APIView):
 
     def put(self, request, todo_id):
         todo = get_object_or_404(Todo, id=todo_id)
-        serializer = TodoCreateSerializer(todo, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
+        if request.user == todo.user:
+            serializer = TodoCreateSerializer(todo, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response("권한이 없습니다.", status=status.HTTP_403_FORBIDDEN)
 
     def delete(self, request, todo_id):
         todo = get_object_or_404(Todo, id=todo_id)
