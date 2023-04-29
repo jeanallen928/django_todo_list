@@ -41,7 +41,11 @@ class TodoDetailView(APIView):
 
     def delete(self, request, todo_id):
         todo = get_object_or_404(Todo, id=todo_id)
-        pass
+        if request.user == todo.user:
+            todo.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response("권한이 없습니다.", status=status.HTTP_403_FORBIDDEN)
 
 
 class StatusView(APIView):
