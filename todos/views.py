@@ -24,8 +24,11 @@ class TodoView(APIView):
 class TodoDetailView(APIView):
     def get(self, request, todo_id):
         todo = get_object_or_404(Todo, id=todo_id)
-        serializer = TodoSerializer(todo)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        if request.user == todo.user:
+            serializer = TodoSerializer(todo)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response("권한이 없습니다.", status=status.HTTP_403_FORBIDDEN)
 
     def put(self, request, todo_id):
         todo = get_object_or_404(Todo, id=todo_id)
