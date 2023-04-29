@@ -8,7 +8,7 @@ from todos.serializers import TodoSerializer, TodoCreateSerializer
 
 class TodoView(APIView):
     def get(self, request):
-        todos = Todo.objects.all()
+        todos = Todo.objects.filter(user=request.user).order_by('-created_at')
         serializer = TodoSerializer(todos, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
