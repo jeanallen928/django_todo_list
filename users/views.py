@@ -38,8 +38,9 @@ class InfoView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def delete(self, request):
-        request.user.delete()
-        logout(request)
+        user = request.user
+        user.is_active = False
+        user.save()
         return Response({"message": "회원 탈퇴!"})
 
     def put(self, request):
