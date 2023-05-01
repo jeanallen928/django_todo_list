@@ -36,10 +36,13 @@ class User(AbstractBaseUser):
         max_length=255,
         unique=True,
     )
-    name = models.CharField(max_length=100)
-    gender = models.CharField(max_length=1, choices=GENDERS, blank=True)
-    age = models.PositiveIntegerField(null=True, blank=True)
-    introduction = models.TextField(blank=True)
+    password = models.CharField("비밀번호", max_length=256)
+
+    name = models.CharField("이름", max_length=100)
+    gender = models.CharField("성별", max_length=1, choices=GENDERS, blank=True)
+    age = models.PositiveIntegerField("나이", null=True, blank=True)
+    introduction = models.TextField("자기소개", blank=True)
+
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
 
